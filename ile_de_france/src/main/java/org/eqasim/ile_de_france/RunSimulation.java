@@ -26,7 +26,7 @@ public class RunSimulation {
 				.build();
 
 		IDFConfigurator configurator = new IDFConfigurator(cmd);
-		Config config = ConfigUtils.loadConfig(cmd.getOptionStrict("config-path"), new ConfigGroup[]{new DrsConfigGroup()} );
+		Config config = ConfigUtils.loadConfig(cmd.getOptionStrict("config-path")); //, new ConfigGroup[]{new DrsConfigGroup()} );
 		configurator.updateConfig(config);
 
 		cmd.applyConfiguration(config);
@@ -38,18 +38,18 @@ public class RunSimulation {
 		configurator.adjustScenario(scenario);
 
         /* == DRS == */
-        (new CarLinkAssigner(scenario.getNetwork())).run(scenario.getPopulation());
-        DrsUtil.addMissingCoordsToPlanElementsFromLinks(scenario.getPopulation(), scenario.getNetwork());
-        DrsUtil.addNewAllowedModeToCarLinks(scenario.getNetwork(), "drsDriver");
+//        (new CarLinkAssigner(scenario.getNetwork())).run(scenario.getPopulation());
+//        DrsUtil.addMissingCoordsToPlanElementsFromLinks(scenario.getPopulation(), scenario.getNetwork());
+//        DrsUtil.addNewAllowedModeToCarLinks(scenario.getNetwork(), "drsDriver");
 
-        DrsUtil.addFakeGenericRouteToDrsDriverLegs(scenario.getPopulation());
+//        DrsUtil.addFakeGenericRouteToDrsDriverLegs(scenario.getPopulation());
         /* ========= */
 
 		Controler controller = new Controler(scenario);
 		configurator.configureController(controller);
 
 		/* == DRS == */
-        Drs.prepareController(controller);
+//        Drs.prepareController(controller);
         /* ========= */
 
 		controller.run();
