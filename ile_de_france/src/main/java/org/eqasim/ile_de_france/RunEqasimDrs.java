@@ -10,24 +10,15 @@ import org.matsim.core.controler.Controler;
 import org.matsim.core.scenario.ScenarioUtils;
 
 /* == DRS == */
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import org.matsim.core.config.ConfigGroup;
 
 import at.ac.ait.matsim.drs.run.Drs;
 import at.ac.ait.matsim.drs.run.DrsConfigGroup;
 import at.ac.ait.matsim.drs.util.CarLinkAssigner;
 import at.ac.ait.matsim.drs.util.DrsUtil;
-
-import java.util.Set;
-
 /* ========= */
 
 public class RunEqasimDrs {
-
-    private static final Logger LOGGER = LogManager.getLogger();
-
 	static public void main(String[] args) throws ConfigurationException {
 		CommandLine cmd = new CommandLine.Builder(args) //
 				.requireOptions("config-path") //
@@ -51,19 +42,7 @@ public class RunEqasimDrs {
         DrsUtil.addMissingCoordsToPlanElementsFromLinks(scenario.getPopulation(), scenario.getNetwork());
         DrsUtil.addNewAllowedModeToCarLinks(scenario.getNetwork(), "drsDriver");
 
-        int fixed = DrsUtil.addMissingDrsAffinity(scenario.getPopulation());
-        if (fixed == 0) {
-            LOGGER.info("All agents already had a {}, great!", "drsAffinity");
-        } else {
-            LOGGER.warn("For {} agents {} was missing and has been added.", fixed, "drsAffinity");
-        }
-
         DrsUtil.addFakeGenericRouteToDrsDriverLegs(scenario.getPopulation());
-
-        int count = DrsUtil.addDrsPlanForEligiblePlans(scenario.getPopulation(), scenario.getConfig(), "drsRider", Set.of("ride"), new String[0]);
-        LOGGER.info("Added initial drs rider plan to {} agent(s)", count);
-        count = DrsUtil.addDrsDriverPlans(scenario.getPopulation(), scenario.getConfig(), new String[0]);
-        LOGGER.info("Added initial drs driver plan to {} agent(s)", count);
         /* ========= */
 
 		Controler controller = new Controler(scenario);
